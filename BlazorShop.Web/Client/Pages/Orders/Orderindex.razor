@@ -1,0 +1,54 @@
+﻿@page "/orders"
+@page "/orders/Orderindex"
+@attribute [Authorize]
+
+@if (Ordermossolist == null)
+{
+    <LoadingScreen />
+}
+else
+{
+    <section class="section-content padding-y bg">
+        <div class="container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        @*<th>"(@Ordermossolist.Count)" records to show</th>*@
+
+                    </tr>
+                </thead>
+                <thead>
+                    <tr>
+                        <th>Edit</th>
+                        <th></th>
+                        <th>Id</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var Order in Ordermossolist)
+                    {
+                        <tr>
+                            <td>
+                                <a class="btn btn-success" href="orders/Detailsmosso/@Order.Id"> Details </a>
+                            </td>
+                            <td>
+                                @Order.Id
+                            </td>
+                            <td>
+                                @Order.UserId
+                            </td>
+                            <td>
+                                @Order.UserName
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+
+
+
+        </div>
+    </section>
+}

@@ -1,0 +1,50 @@
+﻿@page "/"
+@layout MainLayout2
+    @*account/login*@
+<section class="section-conten padding-y bg" style="background-image: url('../images/login4.jpg');background-size:cover;">
+    @*<img src="images/flag.gif"  style="float:left;height: 501px;position: absolute;left: 0;bottom: 0;"/>*@
+
+    <div class="card mx-auto" style="max-width: 380px; margin-top:100px;background-color: rgba(255, 255, 255, 0.6);line-height:4;">
+        <div class="card-body" >
+            <h4 class="card-title mb-4">تسجيل الدخول</h4>
+            <EditForm Model="model" OnValidSubmit="SubmitAsync">
+
+                <ErrorsList ShowErrors="ShowErrors" Errors="Errors" />
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fa fa-envelope"></i>
+                            </span>
+                        </div>
+                        <InputText @bind-Value="model.Email" class="form-control" placeholder="البريد الإلكتروني" type="email" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                        </div>
+                        <InputText @bind-Value="model.Password" class="form-control" placeholder="الرقم السري" type="password" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <a href="#" class="float-right">هل نسيت كلمة السر؟</a>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block"> تسجيل الدخول  </button>
+                </div>
+            </EditForm>
+            <p class="text-center mt-4">ليس لديك حساب ؟ <a href="/account/register">أنشئ حسابًا الآن</a></p>
+        </div>
+        </div>
+
+        
+
+        <br /><br />
+
+</section>

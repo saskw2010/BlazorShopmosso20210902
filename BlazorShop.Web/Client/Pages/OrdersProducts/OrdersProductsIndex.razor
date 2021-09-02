@@ -1,0 +1,70 @@
+﻿@page "/OrdersProducts"
+@inject HttpClient http
+@using BlazorShop.Data
+@using BlazorShop.Data.Models
+<h3>OrdersProducts Index</h3>
+<div dir="ltr">
+<div class="form-group" >
+    <a class="btn btn-success" href="OrdersProducts/create">New OrdersProduct</a>
+</div>
+
+@if (OrdersProducts == null)
+{
+    <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" />
+}
+else if (OrdersProducts.Count == 0)
+{
+    <text>There are no records to show</text>
+}
+else
+{
+<table class="table">
+    <thead>
+        <tr>
+            <th>"(@OrdersProducts.Count)" records to show</th>
+            
+        </tr>
+    </thead>
+    <thead>
+        <tr>
+            <th>Edit</th>
+            <th></th>
+            <th>Id</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var OrdersProduct in OrdersProducts)
+        {
+            <tr>
+                <td>
+                    <a class="btn btn-success" href="OrdersProducts/edit/@OrdersProduct.OrdersProductId">Edit<div>@OrdersProduct.OrdersProductId</div> </a>
+                </td>
+                <td>
+                    @OrdersProduct.OrdersProductId
+                </td>
+                <td>
+                    @OrdersProduct.OrderId
+                </td>
+                <td>
+                    @OrdersProduct.ProductId
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+}
+</div>
+
+@code {
+    List<OrderProduct> OrdersProducts { get; set; }
+    public List<OrderProduct> OrderProductmosso { get; set; } = new List<OrderProduct>();
+    protected async override Task OnInitializedAsync()
+    {
+        //OrdersProducts = await http.GetFromJsonAsync<List<OrdersProductmosso>>("api/orders");
+        this.OrdersProducts = await http.GetFromJsonAsync<List<OrderProduct>>("api/OrderProduct");
+        // return OrderProductmosso;
+        //this.OrdersProducts = await this.OrdersService.Minemosso();
+    }
+}

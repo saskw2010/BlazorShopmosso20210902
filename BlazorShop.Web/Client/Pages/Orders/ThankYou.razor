@@ -1,0 +1,27 @@
+﻿@page "/orders/confirmed/{Id}"
+@attribute [Authorize]
+
+
+<section class="section-pagetop bg" style="min-height:653px;">
+    <div class="container text-center">
+        <h1 class="title-page text-success">
+            <i class="fas fa-check-circle"></i>
+        </h1>
+        <h1 class="title-page">
+            شكرا لكم !
+        </h1>
+        <h5 class="text-muted">
+            تم الانتهاء من طلبك بنجاح .
+        </h5>
+
+        <br />
+
+        <a class="btn btn-primary" href="/order/details/@Id"> تفاصيل العملية </a>
+        <a class="btn btn-outline-primary-light" href="/products/page/1"> قائـمة الإهـداءات </a>
+    </div>
+</section>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+}

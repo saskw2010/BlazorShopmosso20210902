@@ -1,0 +1,101 @@
+﻿@page "/orders/details/{Id}"
+@attribute [Authorize]
+
+@if (order == null)
+{
+    <LoadingScreen />
+}
+else
+{
+    <section class="section-pagetop bg">
+        <div class="container">
+            <h2 class="title-page text-center">Order #@Id</h2>
+        </div>
+    </section>
+
+    <section class="section-content padding-y bg">
+        <div class="container">
+
+            <div class="card mb-3">
+                <article class="card-body">
+                    <header class="mb-4">
+                        <h4 class="card-title">تفاصيل الطلب</h4>
+                    </header>
+                    <div class="row">
+
+                        @foreach (var product in order.Products)
+                        {
+                            <div class="col-md-6">
+                                <figure class="itemside  mb-3">
+                                    <div class="aside">
+                                        <img src="@product.ImageSource" class="border img-xs" />
+                                    </div>
+                                    <figcaption class="info">
+                                        
+                                        <p>@product.OrdersProductId</p>
+                                        <p> @product.Name </p>
+                                        <table class="tablecheckout table-responsive">
+                                            <tr>
+                                                <td><span>السعر @product.Price دينار</span></td>
+                                                <td><span>x</span></td>
+                                                <td><span class="text-danger">العدد @product.Quantity</span></td>
+                                                <td><span>المجموع :</span></td>
+                                                <td><span class="text-primary-light">  @(product.Price * product.Quantity) دينار</span></td>
+                                                <td>
+                                                    <a class="btn btn-success" href="order/edit/@product.OrdersProductId"> <div>Edit("@product.OrdersProductId")</div> </a>
+                                                </td>
+
+
+                                            </tr>
+                                        </table>
+
+                                    </figcaption>
+                                </figure>
+                            </div>
+                        }
+
+                    </div>
+                </article>
+                <article class="card-body border-top">
+                    <dl class="row">
+                        <dt class="col-sm-10">تاريخ الطلب :</dt>
+                        <dd class="col-sm-2 text-right"><strong>@order.CreatedOn</strong></dd>
+
+                        <dt class="col-sm-10">عدد العناصر : </dt>
+                        <dd class="col-sm-2 text-right"><strong class="text-primary-light">@order.Products.Count() عنصر</strong></dd>
+
+                        @*<dt class="col-sm-10">خصومات: <span class="float-left2 text-muted">0%</span></dt>
+                        <dd class="col-sm-2 text-left text-danger "><strong>0 دينار</strong></dd>
+
+                        <dt class="col-sm-10">رسوم توصيل: <span class="float-left2 text-muted">التسليم العادي</span></dt>
+                        <dd class="col-sm-2 text-left"><strong>مجاناً</strong></dd>
+
+                        <dt class="col-sm-10">ضرائب: <span class="float-left2 text-muted">0%</span></dt>
+                        <dd class="col-sm-2 text-left text-success"><strong>0 دينار</strong></dd>*@
+
+                        <dt class="col-sm-10">المجموع:</dt>
+                        <dd class="col-sm-2 text-right"><strong class="h6 text-primary-light"> @totalPrice دينار</strong></dd>
+                    </dl>
+                    @*<dl class="row">
+                        <dt class="col-sm-10">تاريخ الطلب :</dt>
+                        <dd class="col-sm-2 text-right"><strong>@order.CreatedOn</strong></dd>
+
+                        <dt class="col-sm-10">Subtotal: <span class="float-right text-muted">@order.Products.Count() items</span></dt>
+                        <dd class="col-sm-2 text-right"><strong>$@totalPrice</strong></dd>
+
+                        <dt class="col-sm-10">Discount: <span class="float-right text-muted">0%</span></dt>
+                        <dd class="col-sm-2 text-danger text-right"><strong>$0</strong></dd>
+
+                        <dt class="col-sm-10">Delivery charge: <span class="float-right text-muted">Standard Delivery</span></dt>
+                        <dd class="col-sm-2 text-right"><strong>Free</strong></dd>
+
+                        <dt class="col-sm-10">Total:</dt>
+                        <dd class="col-sm-2 text-right"><strong class="h5 text-dark">$@totalPrice</strong></dd>
+                    </dl>*@
+
+                </article>
+            </div>
+
+        </div>
+    </section>
+}

@@ -1,0 +1,52 @@
+﻿<aside class="col-md-3">
+    <ul class="list-group">
+
+        @if (NavigationManager.Uri.Contains("overview"))
+        {
+            <a class="list-group-item active" href="/account/overview">نظرة عامة على الحساب  </a>
+            <a class="list-group-item" href="/orders/mine"> طلباتي </a>
+            <a class="list-group-item" href="/addresses"> عناويني </a>
+            <a class="list-group-item" href="/account/settings"> الإعدادات </a>
+            <a class="list-group-item" href="/account/password"> تغيير كلمة المرور </a>
+        }
+        else if (NavigationManager.Uri.Contains("orders"))
+        {
+            <a class="list-group-item" href="/account/overview"> نظرة عامة على الحساب </a>
+            <a class="list-group-item active" href="/orders/mine"> طلباتي </a>
+            <a class="list-group-item" href="/addresses"> عناويني </a>
+            <a class="list-group-item" href="/account/settings"> الإعدادات </a>
+            <a class="list-group-item" href="/account/passsword"> تغيير كلمة المرور </a>
+        }
+        else if (NavigationManager.Uri.Contains("addresses"))
+        {
+            <a class="list-group-item" href="/account/overview"> نظرة عامة على الحساب </a>
+            <a class="list-group-item" href="/orders/mine"> طلباتي </a>
+            <a class="list-group-item active" href="/addresses"> عناويني </a>
+            <a class="list-group-item" href="/account/settings"> الإعدادات </a>
+            <a class="list-group-item" href="/account/password"> تغيير كلمة المرور </a>
+        }
+        else if (NavigationManager.Uri.Contains("settings"))
+        {
+            <a class="list-group-item" href="/account/overview"> نظرة عامة على الحساب </a>
+            <a class="list-group-item" href="/orders/mine"> طلباتي </a>
+            <a class="list-group-item" href="/addresses"> عناويني </a>
+            <a class="list-group-item active" href="/account/settings"> الإعدادات </a>
+            <a class="list-group-item" href="/account/password"> تغيير كلمة المرور </a>
+        }
+        else if (NavigationManager.Uri.Contains("password"))
+        {
+            <a class="list-group-item" href="/account/overview"> نظرة عامة على الحساب </a>
+            <a class="list-group-item" href="/orders/mine"> طلباتي </a>
+            <a class="list-group-item" href="/addresses"> عناويني </a>
+            <a class="list-group-item" href="/account/settings"> الإعدادات </a>
+            <a class="list-group-item active" href="/account/password"> تغيير كلمة المرور </a>
+        }
+
+    </ul>
+
+    <br />
+
+    <a class="btn btn-light btn-block" href="/" @onclick="Submit">
+        <i class="fas fa-sign-out-alt"></i> <span class="text">تسجيل خروج</span>
+    </a>
+</aside>

@@ -1,0 +1,113 @@
+﻿@page "/Categories/addcat"
+@inject HttpClient client
+@using Microsoft.AspNetCore.Hosting
+
+@*@using System.IO
+
+    @using BlazorInputFile
+    @inject HttpClient client*@
+@*@inject IWebHostEnvironment env
+    @using FileUploadBlazor.Services
+    @inject IFileUpload fileUpload*@
+@attribute [Authorize(Roles = Constants.AdministratorRole)]
+
+@if (categories == null)
+{
+    <LoadingScreen />
+}
+else
+{
+    <section class="section-pagetop bg">
+        <div class="container">
+            <h2 class="title-page text-center">أضف فئة جديدة</h2>
+        </div>
+    </section>
+
+    <section class="section-content padding-y bg">
+        <div class="container">
+            <div class="row">
+                <div class="card mx-auto">
+                    <article class="card-body">
+
+                        <EditForm Model="model" OnValidSubmit="SubmitAsync">
+
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+
+
+                            <div class="form-group">
+                                <label>إسم الفئة</label>
+                                <InputText @bind-Value="model.Name" type="text" class="form-control" />
+                            </div>
+                            @*<InputFile></InputFile>*@
+                            @*<div class="form-group">
+                                    <label>إسم الفئة</label>
+                                    <InputFile OnChange="HandleSelection" />
+                                    <InputText @bind-Value="model.Name" type="text" class="form-control" />
+                                </div>*@
+                            <div>
+                                <label>الصورة</label>
+                                <InputFile @bind-Value="model.ImageSource" OnChange="HandleSelection" />
+                                @*<InputText @bind-Value="model.ImageSource" @oninput="OnValueChanged"    type="text" class="form-control" />*@
+                                @*<img src="~/BlazorShop.Web.Server/uploads/@filename" alt="@filename">*@
+                            </div>
+                            <p class="alert-success">@status</p>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-block btn-primary">إضافة</button>
+                            </div>
+
+                        </EditForm>
+
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+}
+
+@code {
+    string status;
+    string filename;
+    //[Parameter]
+    //public string Value { get; set; }
+    //[Parameter]
+    //public EventCallback<string> ValueChanged { get; set; }
+    //private static Microsoft.AspNetCore.Hosting.IHostingEnvironment environment;
+    //string env = environment.ContentRootPath.ToString();
+
+
+    async Task HandleSelection(IFileListEntry[] files)
+    {
+
+        var file = files.FirstOrDefault();
+        if (file != null)
+        {
+            // Just load into .NET memory to show it can be done
+            // Alternatively it could be saved to disk, or parsed in memory, or similar
+            var ms = new MemoryStream();
+            await file.Data.CopyToAsync(ms);
+
+            status = $"تم إنتهاء تحميل صورة بحجم {file.Size} بإسم {file.Name}";
+            //status = $"Finished loading {file.Size} bytes from {file.Name}";
+            filename = file.Name;
+            model.ImageSource = "uploads/Categories/" + file.Name;
+
+            //var path = Path.Combine(environment.ContentRootPath, "uploads", file.Name);
+            //model.ImageSource = path;
+            var content = new MultipartFormDataContent {
+                { new ByteArrayContent(ms.GetBuffer()), "\"upload\"", file.Name }
+            };
+            await client.PostAsync("upload", content);
+        }
+    }
+
+    //private Task OnValueChanged(ChangeEventArgs e)
+    //{
+    //    Value = filename;
+    //    return ValueChanged.InvokeAsync(Value);
+    //}
+}
+
+
+

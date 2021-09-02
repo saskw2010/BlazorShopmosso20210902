@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+	<StartupObject></StartupObject>
+	<UserSecretsId>d2571605-06b5-490b-a17c-f86fa9f773dc</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+	<!--<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>-->
+	<ItemGroup>
+    <ProjectReference Include="..\..\BlazorShop.Models\BlazorShop.Models.csproj" />
+    <ProjectReference Include="..\..\BlazorShop.Services\BlazorShop.Services.csproj" />
+    <ProjectReference Include="..\Client\BlazorShop.Web.Client.csproj" />
+  </ItemGroup>
+	<ItemGroup>
+	  <Folder Include="uploads\" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,159 @@
+﻿@page "/products/update/{Id:int}"
+@attribute [Authorize(Roles = Constants.AdministratorRole)]
+@inject HttpClient client
+
+@if (categories == null || model == null)
+{
+    <LoadingScreen />
+}
+else
+{
+    <section class="section-pagetop bg">
+        <div class="container">
+            <h2 class="title-page text-center">تعديل بيانات الهدية</h2>
+        </div>
+    </section>
+
+    <section class="section-content padding-y bg">
+        <div class="container">
+            <div class="row">
+                <div class="card mx-auto">
+                    <article class="card-body">
+
+                        <EditForm Model="model" OnValidSubmit="SubmitAsync">
+
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+
+
+                            <div class="form-group">
+                                <label>اسم الهدية</label>
+                                <InputText @bind-Value="model.Name" type="text" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label>الفئة</label>
+                                <InputSelectNumber @bind-Value="model.CategoryId" class="form-control">
+                                    @foreach (var category in categories)
+                                        {
+                                            if (model.CategoryId == category.Id)
+                                            {
+                                            <option value="@category.Id" selected="">@category.Name</option>
+                                            }
+                                            else
+                                            {
+                                            <option value="@category.Id">@category.Name</option>
+                                            }
+                                        }
+                                </InputSelectNumber>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label>السعر قبل الخصم</label>
+                                    <InputNumber @bind-Value="model.Pricebeforediscount" type="number" class="form-control" />
+                                </div>
+                                <div class="col form-group">
+                                    <label>السعر بعد الخصم</label>
+                                    <InputNumber @bind-Value="model.Price" type="number" class="form-control" />
+
+                                </div>
+                                <div class="col form-group">
+                                    <label>نوع العملة</label>
+                                    <InputSelect @bind-Value="model.PriceType" class="form-control">
+                                        <option value="">إختر نوع العملة</option>
+                                        <option value="دك">دك</option>
+                                        <option value="$">$</option>
+                                        <option value="€">€</option>
+                                    </InputSelect>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label>الكود</label>
+                                    <InputText @bind-Value="model.ProductCode" class="form-control" />
+                                </div>
+                                <div class="col form-group">
+                                    <label>الكمية</label>
+                                    <InputNumber @bind-Value="model.Quantity" type="number" class="form-control" />
+                                </div>
+                            </div>
+
+                            @*<div class="form-row">
+                                    <div class="col form-group">
+                                        <label>Price</label>
+                                        <InputNumber @bind-Value="model.Price" type="number" class="form-control" />
+                                    </div>
+                                    <div class="col form-group">
+                                        <label>Quantity</label>
+                                        <InputNumber @bind-Value="model.Quantity" type="number" class="form-control" />
+                                    </div>
+                                </div>*@
+
+                            <div class="form-group">
+                                <label>الصورة</label>
+                                <InputFile @bind-Value="model.ImageSource" OnChange="HandleSelection" />
+                                @*<InputText @bind-Value="model.ImageSource" type="url" class="form-control" />*@
+                            </div>
+                            <b class="alert-success">@status</b>
+                            <div class="form-group">
+                                <label>وصف الهدية</label>
+                                <InputTextArea @bind-Value="model.Description" rows="2" class="form-control"></InputTextArea>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-block btn-primary">تحديث</button>
+                            </div>
+
+                        </EditForm>
+
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+
+@code {
+    string status;
+    string filename;
+    //[Parameter]
+    //public string Value { get; set; }
+    //[Parameter]
+    //public EventCallback<string> ValueChanged { get; set; }
+    //private static Microsoft.AspNetCore.Hosting.IHostingEnvironment environment;
+    //string env = environment.ContentRootPath.ToString();
+
+
+    async Task HandleSelection(IFileListEntry[] files)
+    {
+
+        var file = files.FirstOrDefault();
+        if (file != null)
+        {
+            // Just load into .NET memory to show it can be done
+            // Alternatively it could be saved to disk, or parsed in memory, or similar
+            var ms = new MemoryStream();
+            await file.Data.CopyToAsync(ms);
+
+            status = $"تم إنتهاء تحميل صورة بحجم {file.Size} بإسم {file.Name}";
+            //status = $"Finished loading {file.Size} bytes from {file.Name}";
+            filename = file.Name;
+            model.ImageSource = "uploads/Products/" + file.Name;
+
+            //var path = Path.Combine(environment.ContentRootPath, "uploads", file.Name);
+            //model.ImageSource = path;
+            var content = new MultipartFormDataContent {
+                { new ByteArrayContent(ms.GetBuffer()), "\"upload\"", file.Name }
+            };
+            await client.PostAsync("Productupload", content);
+        }
+    }
+
+    //private Task OnValueChanged(ChangeEventArgs e)
+    //{
+    //    Value = filename;
+    //    return ValueChanged.InvokeAsync(Value);
+    //}
+}

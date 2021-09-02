@@ -1,0 +1,100 @@
+﻿@page "/OrdersProducts/view/{OrdersProductId:int}"
+@inject HttpClient http
+@inject NavigationManager navigationManager
+@using BlazorShop.Data.Models;
+@using  System.Text.Json
+
+<h3>Edit OrdersProduct</h3>
+
+@if (OrdersProductRecipientsmosso1 == null)
+{
+    <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" />
+}
+else
+{
+    
+<EditForm Model="OrdersProductRecipientsmosso1" OnValidSubmit="OnValidSubmit">
+    <button class="btn btn-primary" type="submit">Send</button>
+    @*<button class="btn btn-secondary" type="button" @onclick="Clear">Clear</button>*@
+    <div class="form-group">
+        <button type="button" class="btn btn-secondary"
+                @onclick="@(() => OrdersProductRecipientsmosso1.Add(new OrdersProductRecipientsmosso()))">
+            Add Recipients
+        </button>
+    </div>
+
+
+    <div class="card mb-3">
+        <article class="card-body">
+            <header class="mb-4">
+                <h4 class="card-title">تفاصيل الطلب</h4>
+            </header>
+            <div class="row">
+                <div class="col-md-6">
+                    @for (var i = 0; i < OrdersProductRecipientsmosso1.Count; i++)
+                    {
+                        var index = i;
+                        var address = OrdersProductRecipientsmosso1[i];
+
+                        <h5>RecipientName @(i+1)</h5>
+                        <div class="form-group">
+                            <label>RecipientName:</label>
+                            <InputText class="form-control" @bind-Value="address.RecipientName" />
+                        </div>
+                        <div class="form-group">
+                            <label>Quantity:</label>
+                            <InputText class="form-control" @bind-Value="address.Quantity" />
+                        </div>
+                        <button type="button" class="btn btn-danger"
+                                @onclick="@(() => OrdersProductRecipientsmosso1.RemoveAt(index))">
+                            Remove Item
+                        </button>
+                    }
+                </div>
+</div>
+</article>
+</div>
+
+</EditForm>
+
+}
+
+@code {
+    [Parameter] public int OrdersProductId { get; set; }
+    private List<OrdersProductRecipientsmosso> OrdersProductRecipientsmosso1;
+
+    protected async override Task OnInitializedAsync()
+    {
+        var response = await http.GetAsync($"api/OrderProductR/{OrdersProductId}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            OrdersProductRecipientsmosso1 = JsonSerializer.Deserialize<List<OrdersProductRecipientsmosso>>(await response.Content.ReadAsStringAsync(), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+        else
+        {
+            // Error, likely a 404
+            //navigationManager.NavigateTo("OrdersProducts");
+        }
+    }
+
+    private async Task OnValidSubmit()
+    {
+        var response = await http.PutAsJsonAsync("api/OrderProductR", OrdersProductRecipientsmosso1);
+
+        if (response.IsSuccessStatusCode)
+        {
+            navigationManager.NavigateTo("OrdersProducts");
+        }
+        else
+        {
+            Console.WriteLine(await response.Content.ReadAsStringAsync());
+        }
+
+
+    }
+    private void Clear()
+    {
+      //  OrdersProductRecipientsmosso1 = new OrdersProductRecipientsmosso();
+    }
+}
